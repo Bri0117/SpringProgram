@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+   http://www.springframework.org/schema/beans 
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/aop 
+   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+   http://www.springframework.org/schema/tx 
+   http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+   http://www.springframework.org/schema/context      
+   http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+   
+   <!-- 创建服务的bean，用于测试 -->
+   <bean name="s" class="com.nchu.service.ProductService"/>
+   
+   <!-- 创建切面的bean，用于后面的使用 -->
+   <bean id="aspect" class="com.nchu.aspect.PerformanceAspect"/>
+   
+   <!-- 使用aop：config来设置aop配置 -->
+   <aop:config>
+   		<!-- 使用aop：pointcut来拦截相应的方法 -->
+   		<aop:pointcut expression="execution(* com.nchu.service.ProductService.*()) " id="toPerformance"/>
+   		<!-- 配置对应的切面依赖 -->
+   		<aop:aspect id="perfAspect" ref="aspect">
+   			<!-- 配置pointcut-ref切点依赖、 method配置切点触发对应的切面方法-->
+   			<aop:around pointcut-ref="toPerformance" method="performance2"/>
+   		</aop:aspect>
+   </aop:config>
+ </beans>
